@@ -45,3 +45,18 @@ export function leftPadAsMultiple(arr: Uint8Array, multiple = 32): { length: num
   const width = arr.length + missingLength
   return leftPad(arr, width)
 }
+
+export function bufferToBigInt(buffer: Buffer | Uint8Array): bigint {
+  buffer = Buffer.from(buffer)
+  let bigint = BigInt(0)
+
+  for (let i = 0; i < buffer.length; i++) {
+    const byte = buffer[i]
+    if (byte === undefined) {
+      throw new Error("Buffer component is undefined")
+    }
+    bigint = (bigint << BigInt(8)) + BigInt(byte)
+  }
+
+  return bigint
+}
