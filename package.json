@@ -1,6 +1,6 @@
 {
   "name": "mimc-hasher",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "TypeScript implementation of the ZK-friendly MIMC Cipher hash function.",
   "scripts": {
     "test": "jest",
@@ -9,16 +9,22 @@
   },
   "author": "Winton Nathan-Roberts",
   "dependencies": {},
-  "main": "dist/bundle.cjs",
-  "module": "dist/bundle.mjs",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/bundle.cjs",
+  "module": "./dist/bundle.mjs",
   "license": "GPL-3.0",
   "exports": {
     ".": {
-      "require": "./dist/bundle.cjs",
-      "import": "./dist/bundle.mjs"
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/bundle.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/bundle.cjs"
+      }
     }
   },
+  "types": "./dist/types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Helium-Labs/MiMC-Hasher"
