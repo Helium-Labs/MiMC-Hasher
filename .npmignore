@@ -1,5 +1,0 @@
-# Ignore everything first
-*
-
-# Then unignore specific folders/files
-!dist

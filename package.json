@@ -1,6 +1,6 @@
 {
   "name": "mimc-hasher",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "TypeScript implementation of the ZK-friendly MIMC Cipher hash function.",
   "scripts": {
     "test": "jest",
