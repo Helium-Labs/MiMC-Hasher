@@ -41,7 +41,7 @@ export function leftPad(arr: Uint8Array, width = 1024): { length: number, padded
 }
 
 export function leftPadAsMultiple(arr: Uint8Array, multiple = 32): { length: number, padded: Uint8Array } {
-  const missingLength = multiple - arr.length % multiple
+  const missingLength = (multiple - arr.length % multiple) % multiple
   const width = arr.length + missingLength
   return leftPad(arr, width)
 }
@@ -79,4 +79,16 @@ export function bytesToBigInt(bytes: Uint8Array) {
     res = BigInt(Number(buf.readUIntBE(i, 1))) + res * BigInt(256);
   }
   return res;
+}
+// Assert as being true (e.g. it's not undefined)
+export function Assert(value: boolean, message: string): asserts value is true {
+  if (!value) {
+    throw new Error(message)
+  }
+}
+
+export function AssertDefined<T>(value: T | undefined | null, message: string): asserts value is T {
+  if (value === undefined || value === null) {
+    throw new Error(message)
+  }
 }
