@@ -45,3 +45,20 @@ test("MIMC Hash of Bytes C", () => {
     .toBe(14242006242236970856770518528052882475432357439464668602851051304850104653283n)
 
 })
+
+test("BinaryFormat utility functions", () => {
+  // non-exhaustive
+  // Left padding should work
+  const data = new Uint8Array([104, 101, 108, 108, 111])
+  const expectedPaddedData = new Uint8Array([
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    104, 101, 108, 108, 111
+  ])
+  const paddedData = leftPadAsMultiple(data, 32).padded
+  expect(JSON.stringify(paddedData)).toBe(JSON.stringify(expectedPaddedData))
+  // original data should be untampered (not mutated)
+  const originalData = new Uint8Array([104, 101, 108, 108, 111])
+  expect(JSON.stringify(data)).toBe(JSON.stringify(originalData))
+})

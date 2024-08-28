@@ -22,28 +22,31 @@ export function bigintToArray(n: number, k: number, x: bigint): string[] {
   return ret.map((x) => x.toString())
 }
 
-export function pad(arr: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
+export function pad(data: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
+  const dataCopy = data.slice()
   // pad the uint8array to the width with 0s
   const padded = new Uint8Array(width)
-  padded.set(arr)
-  const length = arr.length
+  padded.set(dataCopy)
+  const length = dataCopy.length
   return { length, padded }
 }
 
-export function leftPad(arr: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
+export function leftPad(data: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
   // pad the uint8array to the width with 0s
+  const dataCopy = data.slice()
   const padded = new Uint8Array(width)
-  const reversedArr = arr.reverse()
+  const reversedArr = dataCopy.reverse()
   padded.set(reversedArr)
-  const length = arr.length
+  const length = dataCopy.length
   const reversedPadded = padded.reverse()
   return { length, padded: reversedPadded }
 }
 
-export function leftPadAsMultiple(arr: Uint8Array, multiple = 32): { length: number, padded: Uint8Array } {
-  const missingLength = (multiple - arr.length % multiple) % multiple
-  const width = arr.length + missingLength
-  return leftPad(arr, width)
+export function leftPadAsMultiple(data: Uint8Array, multiple = 32): { length: number, padded: Uint8Array } {
+  const dataCopy = data.slice()
+  const missingLength = (multiple - dataCopy.length % multiple) % multiple
+  const width = dataCopy.length + missingLength
+  return leftPad(dataCopy, width)
 }
 
 
@@ -73,9 +76,10 @@ export function bigIntToBytes(bi: bigint | number, size: number) {
  * @returns The bigint that was encoded in the input data.
  */
 export function bytesToBigInt(bytes: Uint8Array) {
+  const bytesCopy = bytes.slice()
   let res = BigInt(0);
-  const buf = Buffer.from(bytes);
-  for (let i = 0; i < bytes.length; i++) {
+  const buf = Buffer.from(bytesCopy);
+  for (let i = 0; i < bytesCopy.length; i++) {
     res = BigInt(Number(buf.readUIntBE(i, 1))) + res * BigInt(256);
   }
   return res;
