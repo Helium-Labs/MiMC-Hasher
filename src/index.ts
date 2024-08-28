@@ -1,3 +1,5 @@
+import { Assert, AssertDefined, bytesToBigInt, chunks, leftPadAsMultiple } from './util'
+
 export * as BinaryFormat from './util'
 
 const defaults = {
@@ -115,14 +117,30 @@ function mimc7Cipher(xIn: bigint, k: bigint): bigint {
   return (t + k) % P
 }
 
-export function multiMiMC7(inputs: bigint[], k = BigInt(0)): bigint {
-  // Ensure that k is a BigInt and inputs are converted to BigInts
-  let r = k
+function multiMiMC7Helper(inputs: bigint[], initialR: bigint = 0n): bigint {
+  let k: bigint = initialR
   for (const input of inputs) {
-    // Combine the current result with the hash of the new input
-    const roundHash = mimc7Cipher(input, r)
-    r = (r + input + roundHash) % P
+    const roundHash = mimc7Cipher(input, k)
+    k = (k + input + roundHash) % P
   }
 
-  return r
+  return k
+}
+
+export function multiMiMC7(data: Uint8Array | bigint[], initialR: bigint = 0n): bigint {
+  const dataCopy = data.slice()
+
+  Assert(dataCopy.length > 0, "Data must be provided")
+  AssertDefined(dataCopy[0], "First element must be defined")
+
+  let inputs: bigint[]
+  if (typeof dataCopy[0] === 'bigint') {
+    inputs = dataCopy as bigint[]
+  } else {
+    const dataAsUint8Array = Uint8Array.from(dataCopy as Uint8Array)
+    const paddedData = leftPadAsMultiple(dataAsUint8Array, 32).padded
+    inputs = chunks(paddedData, 32).map(bytesToBigInt)
+  }
+
+  return multiMiMC7Helper(inputs, initialR)
 }
