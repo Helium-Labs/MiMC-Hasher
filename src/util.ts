@@ -23,7 +23,7 @@ export function bigintToArray(n: number, k: number, x: bigint): string[] {
 }
 
 export function pad(data: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
-  const dataCopy = data.slice()
+  const dataCopy = Uint8Array.from(data).slice()
   // pad the uint8array to the width with 0s
   const padded = new Uint8Array(width)
   padded.set(dataCopy)
@@ -33,7 +33,7 @@ export function pad(data: Uint8Array, width = 1024): { length: number, padded: U
 
 export function leftPad(data: Uint8Array, width = 1024): { length: number, padded: Uint8Array } {
   // pad the uint8array to the width with 0s
-  const dataCopy = data.slice()
+  const dataCopy = Uint8Array.from(data).slice()
   const padded = new Uint8Array(width)
   const reversedArr = dataCopy.reverse()
   padded.set(reversedArr)
@@ -43,7 +43,7 @@ export function leftPad(data: Uint8Array, width = 1024): { length: number, padde
 }
 
 export function leftPadAsMultiple(data: Uint8Array, multiple = 32): { length: number, padded: Uint8Array } {
-  const dataCopy = data.slice()
+  const dataCopy = Uint8Array.from(data).slice()
   const missingLength = (multiple - dataCopy.length % multiple) % multiple
   const width = dataCopy.length + missingLength
   return leftPad(dataCopy, width)
@@ -76,7 +76,7 @@ export function bigIntToBytes(bi: bigint | number, size: number) {
  * @returns The bigint that was encoded in the input data.
  */
 export function bytesToBigInt(bytes: Uint8Array) {
-  const bytesCopy = bytes.slice()
+  const bytesCopy = Uint8Array.from(bytes).slice()
   let res = BigInt(0);
   const buf = Buffer.from(bytesCopy);
   for (let i = 0; i < bytesCopy.length; i++) {

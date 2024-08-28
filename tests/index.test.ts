@@ -61,4 +61,9 @@ test("BinaryFormat utility functions", () => {
   // original data should be untampered (not mutated)
   const originalData = new Uint8Array([104, 101, 108, 108, 111])
   expect(JSON.stringify(data)).toBe(JSON.stringify(originalData))
+
+  // Argument shouldn't be mutated if it's a Buffer, as opposed to a uint8array
+  const issuerBytes = Buffer.from('hello.com', 'ascii')
+  leftPadAsMultiple(issuerBytes, 32).padded
+  expect(JSON.stringify(issuerBytes)).toBe(JSON.stringify(Buffer.from('hello.com', 'ascii')))
 })
